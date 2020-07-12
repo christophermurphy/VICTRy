@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\GithubProjectsController;
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+// fetch is used here for recursive humor, but only one level deep
+Route::get('/gitFetch', 'GithubProjectsController@saveData');
+Route::get('/gitindex', 'GithubProjectsController@index');
+
