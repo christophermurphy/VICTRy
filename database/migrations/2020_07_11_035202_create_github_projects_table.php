@@ -15,12 +15,12 @@ class CreateGithubProjectsTable extends Migration
     {
         Schema::create('github_projects', function (Blueprint $table) {
             $table->id();
-            $table->integer('repo_id');
+            $table->integer('repo_id')->unique('repo_id');
             $table->string('name');
-            $table->string('url');
-            $table->date('created_date');
-            $table->date('last_push_date');
-            $table->text('description');
+            $table->string('url')->nullable();
+            $table->dateTime('created_date');
+            $table->dateTime('last_push_date');
+            $table->text('description')->nullable();
             $table->integer('stargazers_count');
             $table->timestamps();
         });
