@@ -20,6 +20,6 @@ Route::get('/', function () {
 });
 
 // fetch is used here for recursive humor, but only one level deep
-Route::get('/gitFetch', 'GithubProjectsController@saveData');
-Route::get('/gitindex', 'GithubProjectsController@index');
+Route::get('/gitFetch', 'GithubProjectsController@saveData')->name('fetch');
+Route::get('/gitindex', 'GithubProjectsController@index')->name('list');
 

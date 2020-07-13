@@ -17,74 +17,12 @@ class GithubProjectsController extends Controller
      */
     public function index()
     {
+        $data = GithubProjects::all()
+        ->sortByDesc('stargazers_count');
 
+        return view('github.index', ['repos'=> $data]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\GithubProjects  $githubProjects
-     * @return \Illuminate\Http\Response
-     */
-    public function show(GithubProjects $githubProjects)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\GithubProjects  $githubProjects
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(GithubProjects $githubProjects)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\GithubProjects  $githubProjects
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, GithubProjects $githubProjects)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\GithubProjects  $githubProjects
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(GithubProjects $githubProjects)
-    {
-        //
-    }
 
     /**
      * Grab the data from github api.
@@ -124,13 +62,15 @@ class GithubProjectsController extends Controller
         try {
             $response = $this->fetchGithubData();
 
+            // lazy way to update the table
+            // I thought about making a dowload group so that changes could be tracked over time
+            GithubProjects::query()->truncate();
+
             $newItem = collect(json_decode($response->body())->items)->each(function($item) {
 
-                GithubProjects::updateOrCreate(
+                GithubProjects::create(
                     [
-                        'repo_id' => $item->id
-                    ],
-                    [
+                        'repo_id' => $item->id,
                         'name' => $item->name,
                         'url' => $item->html_url,
                         'created_date' => $item->created_at,
@@ -140,12 +80,12 @@ class GithubProjectsController extends Controller
                     ]
                 );
             });
-            dump($newItem);
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             // TODO then fail gracefully
         }
+        return redirect()->route('list');
 
     }
 
