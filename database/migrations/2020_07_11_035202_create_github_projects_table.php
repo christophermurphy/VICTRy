@@ -18,8 +18,8 @@ class CreateGithubProjectsTable extends Migration
             $table->integer('repo_id')->unique('repo_id');
             $table->string('name');
             $table->string('url')->nullable();
-            $table->dateTime('created_date');
-            $table->dateTime('last_push_date');
+            $table->dateTimeTz('created_date');
+            $table->dateTimeTz('last_push_date');
             $table->text('description')->nullable();
             $table->integer('stargazers_count');
             $table->timestamps();
