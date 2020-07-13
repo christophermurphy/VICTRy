@@ -73,8 +73,8 @@ class GithubProjectsController extends Controller
                         'repo_id' => $item->id,
                         'name' => $item->name,
                         'url' => $item->html_url,
-                        'created_date' => date('d-m-Y H:i:s', strtotime($item->created_at)),
-                        'last_push_date' => date('d-m-Y H:i:s', strtotime($item->pushed_at)),
+                        'created_date' => date('Y-m-d H:i:s', strtotime($item->created_at)),
+                        'last_push_date' => date('Y-m-d H:i:s', strtotime($item->pushed_at)),
                         'description' => $item->description,
                         'stargazers_count' => $item->stargazers_count
                     ]
